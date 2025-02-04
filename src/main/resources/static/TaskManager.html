@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taskmanager</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="CSS/dashboard.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="CSS\Employee_details.css">
+</head>
+<body>
+    <div class="sidebar" id="sidebar">
+        <div class="logo"></div>
+        <ul class="menu">
+            <li><a href="profile.html"><i class="bi bi-person-circle"></i><span>Profile</span></a></li>
+            <li><a href="Admin_dashboard.html"><i class="bi bi-cash"></i><span>Dashboard</span></a></li>
+            <li><a href="Employee_Details.html"><i class="bi bi-wallet"></i><span>Employee_Details</span></a></li>
+            <li><a href="ChatSystem_for_Admin.html"><i class="bi bi-chat-dots"></i><span>Anonymous</span></a></li>
+            <li><a href="SkillManager.html"><i class="bi bi-person-lines-fill"></i><span>Skill-Manager</span></a></li>
+            <li class="active"><a href="TaskManager.html"><i class="bi bi-wallet"></i><span>Task-Manager</span></a></li>
+
+            <li class="log_out"><a href="Login_Admin.html" id="logout"><i class="bi bi-box-arrow-left"></i><span>Logout</span></a></li>
+        </ul>
+    </div>
+    <button id="sidebarToggle" class="sidebar-toggle"><i class="bi bi-list"></i></button>
+
+    <h1>Task-Manager</h1>
+    <form id="addForm">
+        <input type="text" id="title" placeholder="title" required>
+        <input type="text" id="Description" placeholder="Description" required>
+        <input type="text" id="Task_status" placeholder="Task_status" required>
+        <input type="text" id="Employee" placeholder="Employee" required>
+        <input type="date" id="Due_date" placeholder="Due_Date" required>
+        <button type="submit">Add Task</button>
+    </form>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Task_status</th>
+                <th>Employee</th>
+                <th>Due_Date</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody">
+            <!-- Rows will be added here dynamically -->
+        </tbody>
+    </table>
+
+    <script src="script.js"></script>
+    <script>document.addEventListener('DOMContentLoaded', () => {
+        const form = document.getElementById('addForm');
+        const tableBody = document.getElementById('tableBody');
+        let rowId = 1;
+    
+        // Function to add a new row to the table
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+    
+            // Get form values
+            const title = document.getElementById('title').value;
+            const Description = document.getElementById('Description').value;
+            const Task_status = document.getElementById('Task_status').value;
+            const Employee = document.getElementById('Employee').value;
+            const Due_date = document.getElementById('Due_date').value;
+    
+            // Create a new row
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td>${rowId}</td>
+                <td>${title}</td>
+                <td>${Description}</td>
+                <td>${Task_status}</td>
+                <td>${Employee}</td>
+                <td>${Due_date}</td>
+                <td class="action-buttons">
+                    <button class="edit-btn" onclick="editRow(this)">Edit</button>
+                    <button class="delete-btn" onclick="deleteRow(this)">Delete</button>
+                </td>
+            `;
+    
+            // Append the new row to the table
+            tableBody.appendChild(newRow);
+            rowId++;
+    
+            // Clear the form
+            form.reset();
+        });
+    
+        // Function to delete a row
+        window.deleteRow = (button) => {
+            const row = button.closest('tr');
+            row.remove();
+        };
+    
+        // Function to edit a row
+        window.editRow = (button) => {
+            const row = button.closest('tr');
+            const cells = row.querySelectorAll('td');
+    
+            // Populate the form with the row data
+            document.getElementById('title').value = cells[1].textContent;
+            document.getElementById('Description').value = cells[2].textContent;
+            document.getElementById('Task_status').value = cells[3].textContent;
+            document.getElementById('Employee').value = cells[4].textContent;
+            document.getElementById('Due_date').value = ''; // You can add a field for this if needed
+    
+            // Remove the row from the table
+            row.remove();
+        };
+    });</script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const sidebar = document.querySelector('.sidebar');
+            const sidebarToggle = document.querySelector('.sidebar-toggle');
+            const checkinButton = document.getElementById('checkinButton');
+            const checkoutButton = document.getElementById('checkoutButton');
+        
+            sidebarToggle.addEventListener('click', function () {
+                sidebar.classList.toggle('active');
+            });
+        });
+    </script>
+</body>
+</html>

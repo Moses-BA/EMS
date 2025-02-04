@@ -1,0 +1,94 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>
+            EMS_Sign_up
+        </title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
+        <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="CSS\login.css">
+        <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    </head>
+
+         <body>
+            <h1 class="salute">Project by Moses Bassey</h1>
+            <div class="login-container">
+                <form class="login-form" action="/login.html" method="get">
+                    <h2 class="container text-center">EMS</h2>
+                    <p class="container text-center">Enter your details lets sign you into your account</p>
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="username" required> 
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" required>
+                    </div>
+                    <div class="d-flex justify-content-center w-100">
+                    <button type="submit" class="btn btn-primary w-50">Sign Up</button>
+                </div>
+            </form>
+
+            <div id="errorMessages" style="color: red;"></div>
+            </div>
+        
+         </body>
+         <script>document.addEventListener('DOMContentLoaded', function() {
+            const loginContainer = document.querySelector('.login-container');
+            loginContainer.classList.add('show');
+        });</script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const loginContainer = document.querySelector('.salute');
+                loginContainer.classList.add('show');
+            });
+        </script>
+        <script>
+            document.getElementById('signupForm').addEventListener('submit', function(event) {
+              event.preventDefault();
+        
+              const username = document.getElementById('username').value;
+              const password = document.getElementById('password').value;
+        
+              fetch('/user/register', { // Assuming this is your endpoint
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username, password })
+              })
+            .then(response => {
+                if (!response.ok) {
+                  return response.json().then(data => {
+                    throw new Error(JSON.stringify(data)); 
+                  });
+                }
+                return response.json();
+              })
+            .then(data => {
+                // Registration successful, redirect to login page
+                window.location.href = data.redirectUrl; 
+              })
+            .catch(error => {
+                // Display error messages on the same page
+                const errorMessagesDiv = document.getElementById('errorMessages');
+                errorMessagesDiv.innerHTML = ''; 
+        
+                try {
+                  const errorData = JSON.parse(error.message);
+        
+                  for (const field in errorData) {
+                    const errorMessage = document.createElement('p');
+                    errorMessage.textContent = `${field}: ${errorData[field]}`;
+                    errorMessagesDiv.appendChild(errorMessage);
+                  }
+                } catch (e) {
+                  errorMessagesDiv.textContent = 'Registration failed. Please try again.';
+                }
+              });
+            });
+          </script>
+</html>
